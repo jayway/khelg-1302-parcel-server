@@ -29,9 +29,9 @@ public class DummyParcelRepo implements ParcelRepo {
 
 	private void generateDummyData() {
 		parcels = new ArrayList<Parcel>();
-		parcels.add(new Parcel("001", "Albin"));
-		parcels.add(new Parcel("002", "Berit"));
-		parcels.add(new Parcel("003", "Cecilia"));
+		parcels.add(new Parcel("001", "Albin", "Bertil", 4));
+		parcels.add(new Parcel("002", "Cecilia", "David", 1));
+		parcels.add(new Parcel("003", "Erika", "Fredrik", 19));
 	}
 
 }
