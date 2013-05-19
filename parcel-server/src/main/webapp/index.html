@@ -1,0 +1,114 @@
+<html>
+  <head>
+  	<link href="css/ui-lightness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
+    <style type="text/css">
+      body {background-color:white;}
+    </style>
+	  <script src="js/jquery-1.9.1.min.js"></script>
+  	<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="js/mustache.js"></script>
+    <script>
+      var BASE_URL="/api"
+
+      // base namespace
+      var app = {}
+
+      // backend namespace
+      app.backend = {
+        getAllParcels: function(successFn) {
+          $.getJSON(BASE_URL+"/parcels", successFn)
+        },
+
+        changeParcelStatus: function(parcelId, newStatus, successFn) {
+          $.post(BASE_URL+"/parcels/"+parcelId, {status:newStatus}, successFn)
+        }
+
+      }
+
+      // UI
+      app.ui = {
+
+        init: function() {
+          // This div is used as a dialog, so it's initially hidden
+          $("#change-status-dialog" ).hide();
+          app.ui.updateEverything();
+        },
+
+        updateEverything: function(){
+          app.backend.getAllParcels(app.ui.renderParcels);
+        },
+
+        renderParcels: function(parcelArray) {
+              var template = $("#greeting-template").html()
+              var html = Mustache.render(template, parcelArray)
+              $("#parcel-list").html(html)
+        },
+
+        showChangeStatusDialog: function(id) {
+          $( "#change-status-dialog" ).dialog({
+      			buttons: [
+			      	{
+      					text: "Ok",
+			      		click: function() {
+                  var newStatus = $("select#new-status option:selected").val()
+                  app.backend.changeParcelStatus(id, newStatus, app.ui.updateEverything);
+						      $( this ).dialog( "close" );
+         				}
+				      },
+      				{
+                text: "Cancel",
+                click: function() {
+                  $( this ).dialog( "close" );
+                }
+              }
+            ]
+      		}).dialog("open");
+        }
+      }
+
+      $(function() {
+           app.ui.init()
+        });
+    </script>
+
+    <!-- This is not a script. It's just the template used to
+         render the parcels. It's in a script tag so it won't be
+         rendered when the document is loaded. -->
+    <script id="greeting-template" type="text/html">
+    <hr>
+    {{#.}}
+    <div>
+        <h2>Parcel {{id}}</h2>
+        <ul>
+          <li>Sender: {{sender}}</li>
+          <li>Receiver: {{receiver}}</li>
+          <li>Weight: {{weight}}kg</li>
+          <li>
+            Status: {{status}}
+            <a href="#" onClick="app.ui.showChangeStatusDialog('{{id}}');return false">Change</a>
+          </li>
+        </ul>
+    </div>
+    <hr>
+    {{/.}}
+    </script>
+  </head>
+  <body>
+    <h1>Parcel Server</h1>
+    <div id="parcel-list"></div>
+
+    <!-- This div is used as the content of a dialog.
+         It's never actually shown on the page -->
+    <div id="change-status-dialog" title="Change Parcel Status">
+
+      <form>
+        <label for="new-status">New status</label>
+        <select id="new-status">
+          <option value="SUBMITTED">Submitted</option>
+          <option value="SENT">Sent</option>
+          <option value="DELIVERED">Delivered</option>
+        </select>
+      </form>
+    </div>
+  </body>
+</html>
