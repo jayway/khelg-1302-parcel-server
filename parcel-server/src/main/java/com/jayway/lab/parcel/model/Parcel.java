@@ -5,7 +5,7 @@ public class Parcel {
 	
 	public enum Status {SUBMITTED, SENT, DELIVERED};
 	
-	private String id;
+	private final String id;
 	private String sender;
 	private String receiver;
 	private int weight;
