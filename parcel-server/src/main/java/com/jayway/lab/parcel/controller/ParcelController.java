@@ -140,6 +140,7 @@ public class ParcelController {
 		if (status != null) {
 			Status newStatus = Status.valueOf(status);
 			parcel.setStatus(newStatus);
+			gcmService.notifyStatusChange(parcel);
 		}
 	}
 }
