@@ -39,7 +39,7 @@ import com.jayway.lab.parcel.repo.ParcelRepo;
  * 
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping("/parcels")
 public class ParcelController {
 
 	@Autowired
@@ -54,7 +54,7 @@ public class ParcelController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "parcels")
+	@RequestMapping(method = RequestMethod.GET, value = "")
 	public @ResponseBody
 	List<Parcel> getParcels() {
 		return parcelRepo.getAllParcels();
@@ -67,7 +67,7 @@ public class ParcelController {
 	 *            the id of the parcel to return
 	 * @return the parcel with the specified id.
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "parcels/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public @ResponseBody
 	Parcel getParcel(@PathVariable String id) {
 		return parcelRepo.getParcelById(id);
@@ -84,7 +84,7 @@ public class ParcelController {
 	 * @param weight
 	 * @param status
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/parcels/{id}")
+	@RequestMapping(method = RequestMethod.POST, value = "/{id}")
 	public @ResponseBody
 	void updateParcelPost(@PathVariable String id,
 			@RequestParam(required = false) String sender,
@@ -120,7 +120,7 @@ public class ParcelController {
 	 *            the new status of the parcel, or <code>null</code> if it
 	 *            should be ignored.
 	 */
-	@RequestMapping(method = RequestMethod.PUT, value = "/parcels/{id}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public @ResponseBody
 	void updateParcel(@PathVariable String id,
 			@RequestParam(required = false) String sender,
